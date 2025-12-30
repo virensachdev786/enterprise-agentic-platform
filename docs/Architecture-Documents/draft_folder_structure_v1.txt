@@ -1,0 +1,74 @@
+enterprise-agentic-platform/
+│
+├── docker/
+│   ├── docker-compose.yml          # Spin up Chroma / Weaviate / Redis etc
+│   └── vectordb.env                # Env vars for DB
+│
+├── vector_store/
+│   ├── ingestion/
+│   │   ├── ingest_policies.py      # Reads MD, chunks, embeds, stores
+│   │   ├── chunking_strategy.py
+│   │   └── embeddings_provider.py
+│   └── clients/
+│       └── chroma_client.py        # Wrapper for vector DB
+│
+├── policies/
+│   ├── identity_verification_policy.md
+│   ├── vip_policy.md
+│   ├── mfa_policy.md
+│   ├── password_reset_eligibility.md
+│   ├── failure_escalation_policy.md
+│   ├── incident_policy.md
+│   ├── audit_logging_policy.md
+│   └── remote_network_policy.md
+│
+├── services/
+│   ├── servicenow/
+│   │   ├── sn_client.py            # Base API wrapper
+│   │   ├── password_reset.py
+│   │   ├── user_lookup.py
+│   │   ├── incident_create.py
+│   │   └── incident_close.py
+│   └── email/
+│       ├── email_listener.py       # Gmail / SMTP integration
+│       └── email_parser.py
+│
+├── agents/
+│   ├── intent_engine.py            # Understand (Classifier / Router)
+│   ├── planner.py                  # Plan (UPRA planner / policy aware)
+│   ├── executor.py                 # Act layer (calls services/tools)
+│   ├── validator.py                # Validated execution
+│   └── agent_runner.py             # Orchestrator (UPRA pipeline)
+│
+├── adk/
+│   ├── tools/
+│   │   ├── servicenow_tool.py      # ADK Tool wrappers
+│   │   ├── policy_retriever_tool.py
+│   │   └── email_tool.py
+│   └── memory/
+│       └── vector_memory_adapter.py
+│
+├── docs/
+│   ├── architecture/
+│   │   ├── high_level_arch.md
+│   │   └── low_level_arch.md
+│   ├── flows/
+│   │   ├── password_reset_flow.md
+│   │   └── vip_policy_flow.md
+│   └── curls/
+│       ├── reset_password.sh
+│       ├── create_incident.sh
+│       ├── close_incident.sh
+│       └── lookup_user.sh
+│
+├── tests/
+│   ├── test_vector_store.py
+│   ├── test_sn_client.py
+│   ├── test_policy_retrieval.py
+│   └── test_agent_logic.py
+│
+├── app.py                          # Entry point (Run Agent)
+├── README.md
+├── requirements.txt
+└── .env
+

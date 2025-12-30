@@ -1,0 +1,19 @@
+/enterprise-agentic-platform
+  /src
+    /agent
+    /planner
+    /rag
+    /services
+    /email
+    /utils
+  /db
+    /vectorstore      <-- Chroma
+    /relational       <-- SQLite / Postgres future
+  /kb
+    /policies
+    /tool-knowledge
+  /docker
+  /docs
+  /tests
+  docker-compose.yml
+

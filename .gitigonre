@@ -1,0 +1,55 @@
+# === Environment / Virtual Environments ===
+.env
+.venv/
+venv/
+ENV/
+env/
+# For your agentic platform specifically
+bin/
+lib/
+include/
+
+# === Operating System Files ===
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+Icon?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# === Python Specific ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# === Logs and Databases ===
+*.log
+local_database.db
+*.sqlite
+
+# === IDEs ===
+.vscode/
+.idea/
+*.swp
+*.swo
