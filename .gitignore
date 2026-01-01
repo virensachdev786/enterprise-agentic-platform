@@ -22,6 +22,7 @@ Desktop.ini
 
 # === Python Specific ===
 __pycache__/
+*/__pycache__/
 *.py[cod]
 *$py.class
 *.so
