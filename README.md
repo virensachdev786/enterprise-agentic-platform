@@ -33,6 +33,9 @@ https://www.notion.so/Enterprise-Autonomous-Agent-with-Multi-Pass-Re-Act-Orchest
 
 ---
 
+![Mind Maps - VeeBee Orch  Agentic AI (1)](https://github.com/user-attachments/assets/ffdb19a1-e54f-4c35-8b4c-8493170150ce)
+
+
 # 🚀 VeeBee: Autonomous Enterprise Service Agent
 
 **An Intelligent Orchestrator bridging Natural Language and IT Service Management (ServiceNow).**
@@ -69,7 +72,7 @@ The agent discovers the new capability via  search and executes it using the exi
 
 # **🎬 DEMO: HAPPY PATH**
 
-[view?usp=sharing](https://drive.google.com/file/d/1NlTznpIYZ_tZ9A9CjM1anGQad-3I3NCp/view?usp=sharing)
+[view?usp=sharing](https://drive.google.com/file/d/1NlTznpIYZ_tZ9A9CjM1anGQad-3I3NCp/view?usp=sharing) <---- **`DEMO VIDEO`**
 
 ## **`0:00 - 2:00` | SNOW PDI Env. & Intent Engine**
 
@@ -122,7 +125,7 @@ Plan Generated: {'policy_used': 'Password Reset Operations Policy', 'procedure_u
 
 # **🎬 DEMO: Lack of Document in KB —> Knowledge Response**
 
-[view?usp=sharing](https://drive.google.com/file/d/1unzQSzbmjt8SIJ0t6eZAzpJjeuYQmfKS/view?usp=sharing)
+[view?usp=sharing](https://drive.google.com/file/d/1unzQSzbmjt8SIJ0t6eZAzpJjeuYQmfKS/view?usp=sharing) <---- **`DEMO VIDEO`**
 
 ## **`0:00 - 1:00`** | **Natural Language Request + Await IMAP Trigger:**
 
@@ -192,20 +195,30 @@ LOTS OF CHALLANGES: **TO BE DOCUMENTED**
 
 # 🎯 FUTURE ARCHITECTURE + Improvements
 
-### **TO BE DOCUMENTED …**
+### **1. Reliability & Production Engineering**
 
-High Level Idea without looking at notes: 
+- **SQL Observability & Traceability:** Implementation of a persistent database (PostgreSQL) to log every "Agent Run." This includes storing the raw prompt, the RAG scores, and the LLM’s reasoning trace for compliance and auditing.
+- **API Idempotency:** Developing a "Request Hash" system to ensure that duplicate email triggers or network retries do not result in multiple destructive actions (e.g., resetting a password twice).
+- **Dockerization & Orchestration:** Containerizing the FastAPI backend, ChromaDB, and the Worker nodes for seamless deployment via Kubernetes or AWS ECS.
+- **Configurability:** Transitioning all hardcoded logic and environment variables into a centralized `config.py` and strictly managed `.env` architecture.
 
-- `Logging` via SQL Database for traceability.
-- `Better Prompts` for better System reliability + Fallback in Prompts.
-- Better Knowledge with Tags (This will cover Feedback Loop)
-- Send Temp pass on Phone instead of Email + MFA in flow.
-- `API idempotency`
-- Making the Agent `Conversational`.
-- Make all Variables configurable through `config,py` + `.env`
-- `Dockerize` + write a `requirements.txt` for needed libraries
-- Improve the `core` & put the code into sub folders of `Understand` (`Intent`) + `Plan` + `Retrieve` (`Re-Act`) + `Act` (`Dispatcher`)
-- ETC. ……
+### **2. Security & Governance (Guardrails)**
+
+- **Out-of-Band MFA:** Integration with Twilio or Duo to send temporary credentials via SMS/Phone instead of email, closing the security loop.
+- **Human-in-the-Loop (HITL):** A "Policy Veto" dashboard where high-risk actions (like account deactivation) require an admin’s "One-Click Approval" before the Dispatcher executes.
+- **PII Redaction:** Implementation of a pre-processing layer to scrub Sensitive Personal Information (SPI) from email bodies before they are sent to the LLM.
+- **Deterministic Fallbacks:** Expanding the "Curiosity Loop" so the agent can ask the user clarifying questions if the RAG confidence score remains below the 0.90 threshold.
+
+### **3. Advanced AI & RAG Evolution**
+
+- **Conversational Memory:** Moving from "One-Shot" interactions to a stateful conversation, allowing the user to reply to the agent's email to provide missing information.
+- **Metadata Tagging & Versioning:** Adding version control to the Knowledge Base snippets (e.g., `verified_by: security_team`, `expiry_date: 2026-12-31`).
+- **Feedback Loop (RLHF):** A mechanism where users can rate the agent's response, automatically flagging low-rated RAG chunks for human review and refinement.
+
+### **4. Ecosystem Expansion**
+
+- **Multi-Channel Support:** Extending the listener logic to support Slack, Microsoft Teams, and internal Portals beyond just Email.
+- **Tool-Use Expansion:** Adding "Limb" integrations for Jira (Ticket tracking), Okta (Identity management), and Splunk (Log analysis).
 
 ---
 
