@@ -1,6 +1,9 @@
 from agent_backend.models.intent_schema import IntentResponse
 from .llm_classifier import LLMClassifier
 
+# TO_DO: Clean up Intent Engine.
+# So that, minimal Rules OR Only LLM Call.
+# Fix the Urgency classifier.
 
 class IntentEngine:
     def __init__(self):
@@ -22,38 +25,8 @@ class IntentEngine:
             return {
                 "intent": "password_reset",
                 "urgency": urgency,
-                "system": "AD" if "ad" in text_lower or "active directory" in text_lower else "unknown",
+                "system": "ServiceNow" if "ServiceNow" in text_lower or "servicenow" in text_lower else "unknown",
                 "confidence": 0.85
-            }
-
-        # MFA / VPN / TOKEN ISSUES
-        if ("mfa" in text_lower or "otp" in text_lower or "token" in text_lower or
-            "2fa" in text_lower or "authenticator" in text_lower):
-
-            urgency = "high" if "urgent" in text_lower else "medium"
-
-            return {
-                "intent": "mfa_issue",
-                "urgency": urgency,
-                "system": "VPN" if "vpn" in text_lower else "unknown",
-                "confidence": 0.80
-            }
-
-        # ACCESS / PERMISSION REQUESTS (not supported yet → force unknown)
-        if (
-            "access" in text_lower or
-            "permission" in text_lower or
-            "license" in text_lower or
-            "add me" in text_lower or
-            "request access" in text_lower or
-            "provision" in text_lower or
-            "enable" in text_lower
-        ):
-            return {
-                "intent": "unknown",
-                "urgency": "medium",
-                "system": "unknown",
-                "confidence": 0.60
             }
 
         # UNKNOWN

@@ -1,4 +1,4 @@
-from fastapi import FastAPI  # pyright: ignore[reportMissingImports]
+from fastapi import FastAPI
 from agent_backend.api.routes import router
 from agent_backend.api.routes import router
 

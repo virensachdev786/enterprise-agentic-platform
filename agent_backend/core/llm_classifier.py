@@ -4,34 +4,56 @@ from openai import OpenAI
 
 class LLMClassifier:
     def __init__(self):
+        # WOULD GET THESE VALUES FROM .env if had enough time..
         self.client = OpenAI(
-            base_url="http://localhost:18181/v1",
-            api_key="nexa"
+            # # LOCAL #
+            # base_url="http://localhost:18181/v1",
+            # api_key="nexa"
+            # OPENAI #
+            base_url ="https://api.openai.com/v1",
+            api_key="OPENAI-KEY"
         )
-        self.model_name = "bartowski/Meta-Llama-3-8B-Instruct-GGUF"
+        # self.model_name = "bartowski/Meta-Llama-3-8B-Instruct-GGUF"
+        self.model_name = "gpt-4o-mini"
+    
 
     def classify(self, text: str):
         system_prompt = ("""
-            You are an IT incident intent classifier. 
+            ### ROLE
+            You are a Lead IT Triage Engineer. Your job is to extract intent from IT support emails.
             You MUST ONLY output JSON. No prose. No explanations.
-            Return a single JSON object with the exact schema:
+            Return a single JSON object with the exact schema
 
+            ### ENTITY MAPPING LOGIC
+            Map the user's mentioned system to these Internal Categories:
+            1. **AD**: Windows, Main Computer, Laptop Login, SSO, SAML, Portal, Directory, or general "system."
+            2. **Salesforce**: CRM, Salesforce, or Lead Management.
+            3. **VPN**: GlobalProtect, Remote Access, AnyConnect, or "Home Connection."
+            4. **ServiceNow**: Ticketing, SNOW, Support Portal, or KB.
+
+            ### INTENT DEFINITIONS
+            - **password_reset**: Credentials rejected, expired, forgotten, or "not accepted."
+            - **unlock_account**: Account "locked," "frozen," "too many attempts," or "greyed out."
+            - **mfa_issue**: Tokens, 2FA, codes, Duo, Okta pushes, or "new phone setup."
+            - **knowledge_question**: Use for "How-to" questions, policy inquiries, or requests for information that do not require a technical fix/reset (e.g., "Where is the holiday schedule?" or "How do I set up MFA?").
+
+            ### DECISION LOGIC
+            1. **PRIMARY BLOCKER**: If a user reports a broken monitor but CANNOT login to report it, prioritize the login issue (password_reset/unlock_account).
+            2. **HARDWARE/OFFICE**: If the email is purely about hardware (broken mouse, monitor), licenses, or office furniture → intent="unknown".
+
+            ### OUTPUT FORMAT
+            Output ONLY valid JSON, 
+            DO NOT SAY ANYTHING LIKE "Here is the output", ONLY RETURN VALID JSON OBJECT
+            NOTHING ELSE - no reasoning or Analysis
             {
-            "intent": "password_reset" | "unlock_account" | "mfa_issue" | "unknown",
-            "urgency": "low" | "medium" | "high",
-            "system": "AD" | "VPN" | "Salesforce" | "unknown",
-            "confidence": float between 0 and 1
+                "intent": "password_reset" | "unlock_account" | "mfa_issue" | "knowledge_question" | "unknown",
+                "urgency": "low" | "medium" | "high",
+                "system": "AD" | "VPN" | "Salesforce" | "ServiceNow" | "unknown",
+                "confidence": float
             }
-
-            STRICT RULES:
-            - DO NOT guess.
-            - If the request is about tool access, permissions, licenses, approvals, onboarding, analytics tools, Tableau, Slack, Jira, or anything not explicitly password/MFA related → intent MUST be "unknown".
-            - If the text does not clearly match a supported intent → intent MUST be "unknown".
-            - If system is not clearly mentioned (AD, VPN, Salesforce) → system MUST be "unknown".
-            - NEVER invent a system or intent that is not explicitly mentioned.
-            - If unsure, set intent = "unknown", system = "unknown", urgency = "medium", confidence <= 0.5.
-
-            Output ONLY valid JSON. No markdown. No text""")
+            
+            
+        """)
 
         try:
             response = self.client.chat.completions.create(
@@ -47,6 +69,7 @@ class LLMClassifier:
 
             # Remove Markdown JSON fences if present
             raw = re.sub(r"```json|```", "", raw).strip()
+            print(raw)
 
             data = json.loads(raw)
 

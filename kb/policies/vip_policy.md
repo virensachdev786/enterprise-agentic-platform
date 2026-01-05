@@ -1,22 +1,9 @@
-# VIP & Executive Password Reset Policy
+# VIP & Executive Protection Policy
+ID: POLICY_VIP_BLOCK
 
-## Purpose
-Ensure additional protection for high-value accounts.
-
-## VIP Users Include:
-- Executives (VP, C-Level, Directors)
-- System Administrators
-- Finance leadership
-- Security leadership
-
-## Rules
-1. Automated password reset is NOT allowed.
-2. MFA must always be required.
-3. Reset must be performed by privileged IT admin only.
-4. Incident must be logged with severity HIGH.
-
-## System Behavior
-If VIP detected:
-- Do NOT auto reset
-- Create HIGH PRIORITY ServiceNow ticket
-
+## RULE
+IF user_state.vip_status == True:
+    - ACTION: RESET_PASSWORD is STRICTLY FORBIDDEN.
+    - ACTION: MUST CREATE_INCIDENT with priority 1.
+    - ACTION: MUST ESCALATE_TO_HUMAN.
+    - REASON: High-value targets require physical identity verification.
